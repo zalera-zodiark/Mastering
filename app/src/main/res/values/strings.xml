@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Mastering</string>
+
+    <!-- Secciones -->
+    <string-array name="array_of_sections">
+        <item>Ingeniería en Computación</item>
+        <item>Medicina</item>
+        <item>Ingeniería en Electrónica</item>
+        <item>Mecánica Automotriz</item>
+        <item>Supervivencia</item>
+        <item>Enfermería</item>
+    </string-array>
+
+    <!-- Materias de Ingeniería en Computación -->
+    <string-array name="array_of_subjects_computer_engineering">
+        <item>Inkscape</item>
+        <item>Kotlin</item>
+        <item>Material Design</item>
+        <item>Android</item>
+        <item>Patrones de Diseño</item>
+    </string-array>
+
+    <!-- Ingeniería en Computación - Temas Inkscape -->
+    <string-array name="array_of_themes_inkscape">
+        <item>Atajos de Teclado</item>
+    </string-array>
+
+    <!-- Materias de Medicina -->
+    <string-array name="array_of_subjects_medicine">
+
+    </string-array>
+
+    <!-- Materias de Ingeniería Electrónica -->
+    <string-array name="array_of_subjects_electronic_engineering">
+
+    </string-array>
+
+    <!-- Materias de Mecánica Automotriz -->
+    <string-array name="array_of_subjects_automotive">
+
+    </string-array>
+
+    <!-- Materias de Supervivencia -->
+    <string-array name="array_of_subjects_survival">
+
+    </string-array>
+
+    <!-- Materias de Enfermería -->
+    <string-array name="array_of_subjects_nursing">
+
+    </string-array>
+</resources>
