@@ -36,6 +36,10 @@ fun databaseScreen(
     var subjectSelected by rememberSaveable { mutableStateOf("No seleccionada") }
     var themeSelected by rememberSaveable { mutableStateOf("No seleccionada") }
     var optionSelected by rememberSaveable { mutableStateOf(Option.None) }
+    var questionText by rememberSaveable { mutableStateOf("") }
+    var answerText1 by rememberSaveable { mutableStateOf("") }
+    var answerText2 by rememberSaveable { mutableStateOf("") }
+    var answerText3 by rememberSaveable { mutableStateOf("") }
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
 
@@ -84,6 +88,8 @@ fun databaseScreen(
                                         showBottomSheet = true
                                         optionSelected = Option.Section
                                         databaseViewModel.loadSectionList()
+                                        subjectSelected = ""
+                                        themeSelected = ""
                                     } ) { Text("Seleccionar") }
                             }
                         }
@@ -103,6 +109,7 @@ fun databaseScreen(
                                         showBottomSheet = true
                                         optionSelected = Option.Subject
                                         databaseViewModel.loadSubjectList()
+                                        themeSelected = ""
                                     }) { Text("Seleccionar") }
                             }
                         }
@@ -133,7 +140,51 @@ fun databaseScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-
+                TextField(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp, vertical = 6.dp),
+                    value = questionText,
+                    onValueChange = { questionText = it },
+                    label = { Text("pregunta") },
+                    singleLine = true
+                )
+                TextField(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp, vertical = 6.dp),
+                    value = answerText1,
+                    onValueChange = { answerText1 = it },
+                    label = { Text("respuesta-1") },
+                    singleLine = true
+                )
+                TextField(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp, vertical = 6.dp),
+                    value = answerText2,
+                    onValueChange = { answerText2 = it },
+                    label = { Text("respuesta-2") },
+                    singleLine = true
+                )
+                TextField(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp, vertical = 6.dp),
+                    value = answerText3,
+                    onValueChange = { answerText3 = it },
+                    label = { Text("respuesta-3") },
+                    singleLine = true
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(top = 20.dp, start = 4.dp, end = 4.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ElevatedButton(
+                        modifier = Modifier.padding(end = 8.dp),
+                        onClick = { navController.popBackStack() }
+                    ) { Text("Cancelar") }
+                    Button(
+                        modifier = Modifier.padding(end = 4.dp),
+                        onClick = {
+                            databaseViewModel
+                                .saveNewQuestion(themeSelected, questionText, answerText1, answerText2, answerText3)
+                        }
+                    ) { Text("Aceptar") }
+                }
             }
 
         }

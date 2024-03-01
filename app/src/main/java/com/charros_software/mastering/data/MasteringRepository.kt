@@ -4,7 +4,8 @@ class MasteringRepository(
     private val sectionDao: SectionDao,
     private val statProgressDao: StatProgressDao,
     private val subjectDao: SubjectDao,
-    private val themeDao: ThemeDao
+    private val themeDao: ThemeDao,
+    private val questionDao: QuestionDao
 ) {
 
     suspend fun getAllSections() = sectionDao.getAllSections()
@@ -13,7 +14,7 @@ class MasteringRepository(
 
     suspend fun getSubjectId(subject: String) = subjectDao.getSubjectId(subject)
 
-    suspend fun getThemeId(theme: String) = themeDao.getThemeId(theme)
+    private suspend fun getThemeId(theme: String) = themeDao.getThemeId(theme)
 
     suspend fun getSubjectsBySection(section: String): List<Subject> {
         val sectionsWithSubjects = sectionDao.getSectionsWithSubjects()
@@ -37,5 +38,12 @@ class MasteringRepository(
 
     suspend fun addNewTheme(theme: String, subjectId: Int) {
         themeDao.addTheme(theme, subjectId)
+    }
+
+    suspend fun addNewQuestion(
+        theme: String, question: String, answer1: String, answer2: String, answer3: String
+    ) {
+        val themeId = getThemeId(theme)
+        questionDao.addQuestion(question, answer1, answer2, answer3, themeId)
     }
 }

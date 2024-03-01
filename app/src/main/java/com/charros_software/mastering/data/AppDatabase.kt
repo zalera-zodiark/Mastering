@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [StatProgress::class, Question::class, Section::class, Subject::class, Theme::class],
-    version = 4)
+    entities = [StatProgress::class, Question::class, Section::class, Subject::class, Theme::class, Question::class],
+    version = 5)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun statProgressDao(): StatProgressDao
     abstract fun sectionDao(): SectionDao
     abstract fun subjectDao(): SubjectDao
     abstract fun themeDao(): ThemeDao
+    abstract fun questionDao(): QuestionDao
 
     companion object {
         @Volatile

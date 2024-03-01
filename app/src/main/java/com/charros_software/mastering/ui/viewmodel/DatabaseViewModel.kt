@@ -24,7 +24,8 @@ class DatabaseViewModel(context: Context) : ViewModel() {
         database.sectionDao(),
         database.statProgressDao(),
         database.subjectDao(),
-        database.themeDao())
+        database.themeDao(),
+        database.questionDao())
     private var selectedOption = Option.None
 
     fun loadSectionList() {
@@ -96,6 +97,14 @@ class DatabaseViewModel(context: Context) : ViewModel() {
                     _uiState.update { it.copy(themeSelected = new) }
                 }
             }
+        }
+    }
+
+    fun saveNewQuestion(
+        theme: String, question: String, answer1: String, answer2: String, answer3: String
+    ) {
+        viewModelScope.launch {
+            repository.addNewQuestion(theme, question, answer1, answer2, answer3)
         }
     }
 }
