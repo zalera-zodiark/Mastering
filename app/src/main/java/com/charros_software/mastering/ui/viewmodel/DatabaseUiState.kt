@@ -5,4 +5,5 @@ data class DatabaseUiState(
     val sectionSelected: String = "",
     val subjectSelected: String = "",
     val themeSelected: String = "",
+    val questionInserted: Boolean = false,
 )

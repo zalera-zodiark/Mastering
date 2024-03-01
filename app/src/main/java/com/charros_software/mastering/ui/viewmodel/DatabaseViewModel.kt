@@ -105,6 +105,11 @@ class DatabaseViewModel(context: Context) : ViewModel() {
     ) {
         viewModelScope.launch {
             repository.addNewQuestion(theme, question, answer1, answer2, answer3)
+            _uiState.update { it.copy(questionInserted = true) }
         }
+    }
+
+    fun questionInsertionFinished() {
+        _uiState.update { it.copy(questionInserted = false) }
     }
 }

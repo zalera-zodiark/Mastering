@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [StatProgress::class, Question::class, Section::class, Subject::class, Theme::class, Question::class],
+    entities = [StatProgress::class, Section::class, Subject::class, Theme::class, Question::class],
     version = 5)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun statProgressDao(): StatProgressDao

@@ -1,6 +1,7 @@
 package com.charros_software.mastering.ui.screens
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -182,11 +183,19 @@ fun databaseScreen(
                         onClick = {
                             databaseViewModel
                                 .saveNewQuestion(themeSelected, questionText, answerText1, answerText2, answerText3)
+                            questionText = ""
+                            answerText1 = ""
+                            answerText2 = ""
+                            answerText3 = ""
                         }
                     ) { Text("Aceptar") }
                 }
             }
 
+        }
+        if (databaseUiState.questionInserted) {
+            Toast.makeText(LocalContext.current, "Pregunta insertada con éxito!!!", Toast.LENGTH_SHORT).show()
+            databaseViewModel.questionInsertionFinished()
         }
         if (showBottomSheet) {
             ModalBottomSheet(
