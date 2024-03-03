@@ -8,46 +8,31 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.charros_software.mastering.R
 import com.charros_software.mastering.navigation.AppScreens
-
-@Composable
-fun getSubjects(section: String?):List<String> {
-    return when (section?.toInt()) {
-        0 -> { //Ingeniería en computación
-            stringArrayResource(R.array.array_of_subjects_computer_engineering).toList()
-        }
-        1 -> { // Medicina
-            stringArrayResource(R.array.array_of_subjects_medicine).toList()
-        }
-        2 -> { // Ingeniería en Electrónica
-            stringArrayResource(R.array.array_of_subjects_electronic_engineering).toList()
-        }
-        3 -> { // Mecánica Automotriz
-            stringArrayResource(R.array.array_of_subjects_automotive).toList()
-        }
-        4 -> { // Supervivencia
-            stringArrayResource(R.array.array_of_subjects_survival).toList()
-        }
-        5 -> { // Enfermería
-            stringArrayResource(R.array.array_of_subjects_nursing).toList()
-        }
-        else -> emptyList()
-    }
-}
+import com.charros_software.mastering.ui.viewmodel.MainQuestionnariesViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun mainQuestionnariesScreen(navController: NavController, section: String?) {
+fun mainQuestionnariesScreen(
+    navController: NavController,
+    section: String?,
+    mainQuestionnariesViewModel: MainQuestionnariesViewModel = MainQuestionnariesViewModel(LocalContext.current),) {
+
+    val mainQuestionnariesUiState by mainQuestionnariesViewModel.uiState.collectAsState()
+    mainQuestionnariesViewModel.setSubjectListBySection(section ?: "")
+
     Scaffold {
 
-        val listOfSubjects = getSubjects(section)
+        val listOfSubjects = mainQuestionnariesUiState.subjectList
             LazyColumn(
             modifier = Modifier.fillMaxSize()
                 .padding(top = 20.dp, bottom = 10.dp, start = 5.dp, end = 5.dp),
@@ -56,11 +41,12 @@ fun mainQuestionnariesScreen(navController: NavController, section: String?) {
         ) {
             items(listOfSubjects.size) {
                 ElevatedCard(
-                    modifier = Modifier.size(width = 380.dp, height = 150.dp).padding(10.dp),
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        modifier = Modifier.fillMaxWidth().padding(20.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         TitleText(listOfSubjects[it])
                         Column(
@@ -68,7 +54,7 @@ fun mainQuestionnariesScreen(navController: NavController, section: String?) {
                             horizontalAlignment = Alignment.End
                         ) {
                             FilledIconButton(
-                                onClick = { navController.navigate(AppScreens.QuestionaryScreen.route + "/${it}") }
+                                onClick = { navController.navigate(AppScreens.QuestionaryScreen.route + "/${listOfSubjects[it]}") }
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_question_24),

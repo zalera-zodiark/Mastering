@@ -12,11 +12,15 @@ interface ThemeDao {
     ) suspend fun getThemeId(theme: String): Int
 
     @Query(
+        "SELECT * FROM theme WHERE theme_name = :theme"
+    ) suspend fun getThemeSubjectId(theme: String): Theme
+
+    @Query(
         "INSERT INTO theme(theme_name, subject_id) VALUES(:theme, :subjectId)"
     ) suspend fun addTheme(theme: String, subjectId: Int)
 
     @Transaction
     @Query(
         "SELECT * FROM theme"
-    ) suspend fun getThemesWithChapters(): List<ThemeWithQuestions>
+    ) suspend fun getThemesWithQuestions(): List<ThemeWithQuestions>
 }

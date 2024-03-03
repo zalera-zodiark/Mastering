@@ -12,6 +12,10 @@ interface SubjectDao {
     ) suspend fun addSubject(subject: String, sectionId: Int)
 
     @Query(
+        "SELECT * FROM subject WHERE subjectId = :subjectId"
+    ) suspend fun getSubjectById(subjectId:Int): Subject
+
+    @Query(
         "SELECT subjectId FROM subject WHERE(subject_name = :subjectName)"
     ) suspend fun getSubjectId(subjectName: String): Int
 

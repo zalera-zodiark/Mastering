@@ -5,10 +5,22 @@ import androidx.room.Query
 
 @Dao
 interface StatProgressDao {
+    @Query(
+        "SELECT * FROM stat_progress WHERE subject = :subject"
+    ) suspend fun getStatProgressListBySubject(subject: String): List<StatProgress>
+
+    @Query(
+        "INSERT INTO stat_progress(section, subject, theme, mark_goal) " +
+                "VALUES(:section, :subject, :theme, :markGoal)"
+    ) suspend fun newStatProgress(section: String, subject: String, theme: String, markGoal: Int)
+
+    @Query("UPDATE stat_progress SET mark_goal = :markGoal WHERE uid = :statId")
+    suspend fun updateStatProgress(statId: Int, markGoal: Int)
+
     @Query("SELECT * FROM stat_progress WHERE uid = :statId")
-    fun getStatProgressById(statId: Int): StatProgress
+    suspend fun getStatProgressById(statId: Int): StatProgress
 
     @Query("SELECT * FROM stat_progress WHERE " +
-            "section = :section AND subject = :subject AND theme = :theme")
-    fun getStatProgressByData(section:String, subject: String, theme: String): StatProgress
+            "theme = :theme")
+    suspend fun getStatProgressByData(theme: String): StatProgress?
 }

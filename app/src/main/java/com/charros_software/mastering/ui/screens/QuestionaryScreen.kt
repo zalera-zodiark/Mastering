@@ -5,31 +5,32 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.charros_software.mastering.R
 import com.charros_software.mastering.navigation.AppScreens
-
-@Composable
-fun getQuestionnaries(theme: String?):List<String> {
-    return when (theme?.toInt()) {
-        0 -> stringArrayResource(R.array.array_of_themes_inkscape).toList()
-
-        else -> emptyList()
-    }
-}
+import com.charros_software.mastering.ui.viewmodel.QuestionaryViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun questionaryScreen(navController: NavController, theme: String?) {
+fun questionaryScreen(
+    navController: NavController, subject: String?,
+    questionaryViewModel: QuestionaryViewModel = QuestionaryViewModel(LocalContext.current)) {
+
+    val questionaryUiState by questionaryViewModel.uiState.collectAsState()
+    questionaryViewModel.loadThemeList(subject ?: "")
+
     Scaffold {
 
-        val listOfThemes = getQuestionnaries(theme)
+        val listOfThemes = questionaryUiState.themeList
+        val listOfStatProgress = questionaryUiState.statProgressList
         LazyColumn(
             modifier = Modifier.fillMaxSize()
                 .padding(top = 20.dp, bottom = 10.dp, start = 5.dp, end = 5.dp),
@@ -38,11 +39,12 @@ fun questionaryScreen(navController: NavController, theme: String?) {
         ) {
             items(listOfThemes.size) {
                 ElevatedCard(
-                    modifier = Modifier.size(width = 380.dp, height = 150.dp).padding(10.dp),
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        modifier = Modifier.fillMaxWidth().padding(10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp),
@@ -58,13 +60,19 @@ fun questionaryScreen(navController: NavController, theme: String?) {
                             horizontalAlignment = Alignment.End
                         ) {
                             FilledIconButton(
-                                onClick = { navController.navigate(AppScreens.PracticeQuestionaryScreen.route + "/${it}") }
+                                onClick = { navController.navigate(AppScreens.PracticeQuestionaryScreen.route + "/${listOfThemes[it]}") }
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_smart_play_24),
                                     contentDescription = "Cuestionario"
                                 )
                             }
+                            Text(
+                                modifier = Modifier.padding(4.dp),
+                                text = listOfStatProgress.find {
+                                    statProgress -> statProgress.theme.equals(listOfThemes[it], true)
+                                }?.markGoal.toString() + "%"
+                            )
                         }
                     }
                 }

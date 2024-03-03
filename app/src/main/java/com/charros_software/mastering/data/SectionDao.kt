@@ -11,6 +11,10 @@ interface SectionDao {
     ) suspend fun getAllSections(): List<Section>
 
     @Query(
+        "SELECT * FROM section WHERE sectionId = :sectionId"
+    ) suspend fun getSectionById(sectionId: Int): Section
+
+    @Query(
         "INSERT INTO section (section_name) VALUES (:section)"
     ) suspend fun addSection(section: String)
 

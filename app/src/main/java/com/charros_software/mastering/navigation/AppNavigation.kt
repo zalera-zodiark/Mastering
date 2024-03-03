@@ -22,12 +22,6 @@ fun AppNavigation() {
             })) {
             mainQuestionnariesScreen(navController, it.arguments?.getString("section"))
         }
-        composable(route = AppScreens.MainTopicsScreen.route + "/{section}",
-            arguments = listOf(navArgument(name = "section") {
-                type = NavType.StringType
-            })) {
-            mainTopicsScreen(navController, it.arguments?.getString("section"))
-        }
         composable(route = AppScreens.QuestionaryScreen.route + "/{theme}",
             arguments = listOf(navArgument(name = "theme") {
                 type = NavType.StringType

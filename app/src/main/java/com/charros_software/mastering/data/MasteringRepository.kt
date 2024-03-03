@@ -28,6 +28,12 @@ class MasteringRepository(
         return themeList?.themes ?: emptyList()
     }
 
+    suspend fun getQuestionsByTheme(theme: String): List<Question> {
+        val themesWithQuestions = themeDao.getThemesWithQuestions()
+        val questionList = themesWithQuestions.find { it.theme.themeName.equals(theme, true) }
+        return questionList?.questions ?: emptyList()
+    }
+
     suspend fun addNewSection(section: String) {
         sectionDao.addSection(section)
     }
@@ -45,5 +51,29 @@ class MasteringRepository(
     ) {
         val themeId = getThemeId(theme)
         questionDao.addQuestion(question, answer1, answer2, answer3, themeId)
+    }
+
+    suspend fun saveProgress(theme: String?, progress: Int) {
+        if (theme != null) {
+            if (statProgressDao.getStatProgressByData(theme) != null) {
+                val idProgressStat = statProgressDao.getStatProgressByData(theme)
+                statProgressDao.updateStatProgress(idProgressStat!!.uid, progress)
+            } else {
+                val theme = themeDao.getThemeSubjectId(theme)
+                val idSubject = theme.subjectId
+                val subject = subjectDao.getSubjectById(idSubject)
+                val idSection = subject.sectionId
+                val section = sectionDao.getSectionById(idSection)
+                statProgressDao.newStatProgress(
+                    section.sectionName,
+                    subject.subjectName,
+                    theme.themeName,
+                    progress)
+            }
+        }
+    }
+
+    suspend fun getStatProgressList(subject: String): List<StatProgress> {
+        return statProgressDao.getStatProgressListBySubject(subject)
     }
 }
